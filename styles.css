@@ -1,0 +1,22 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+h1 {
+    font-size: 50px;
+    margin-bottom: 20px;
+}
+
+div {
+    text-align: center;
+}
+
+canvas {
+    display: block;
+    margin: 0 auto;
+}

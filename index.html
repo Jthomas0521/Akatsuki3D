@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CMSC 405 Project 3</title>
+    <h1>Project 3 Jahquan Thomas</h1>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <script src="three.js"></script>
+    <script src="specific.js"></script>
+    <script src="min.js"></script>
+
+    <script>
+        if (!Detector.webgl) Detector.addGetWebGLMessage();
+
+        var container, stats;
+        var camera, scene, renderer;
+        var ambientLight, directionalLight, pointLight;
+        var radioButtons;
+
+        init();
+        animate();
+
+    function init() {
+        container = document.createElement('div');
+        document.body.appendChild(container);
+
+        // Radio buttons for animation control
+        radioButtons = document.createElement('div');
+        radioButtons.innerHTML = `
+            <input type="radio" name="animation" value="rotate" checked> Rotate
+            <input type="radio" name="animation" value="bounce"> Bounce
+        `;
+        document.body.appendChild(radioButtons);
+
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
+        camera.position.y = 400;
+
+        scene = new THREE.Scene();
+
+        // Lighting Effects
+        ambientLight = new THREE.AmbientLight(0xfff799);
+        directionalLight = new THREE.DirectionalLight(0x827a00);
+        pointLight = new THREE.PointLight(0xff0000, 1, 200);
+        pointLight.position.set(0, 100, 0);
+
+        scene.add(ambientLight, directionalLight, pointLight);
+
+        var texture = new THREE.TextureLoader().load('akatsuki.png');
+
+        // Example using a BoxGeometry
+        var boxGeometry = new THREE.BoxGeometry(100, 100, 100);
+        var boxMaterial = new THREE.MeshLambertMaterial({ map: texture });
+        var boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
+        boxMesh.position.set(-200, 0, 0);
+        scene.add(boxMesh);
+
+        // Example using a SphereGeometry
+        var sphereGeometry = new THREE.SphereGeometry(75, 20, 10);
+        var sphereMaterial = new THREE.MeshLambertMaterial({ map: texture });
+        var sphereMesh = new THREE.Mesh(sphereGeometry, sphereMaterial);
+        sphereMesh.position.set(-400, 0, 200);
+        scene.add(sphereMesh);
+
+        // Example using a CylinderGeometry
+        var cylinderGeometry = new THREE.CylinderGeometry(50, 50, 100, 20);
+        var cylinderMaterial = new THREE.MeshLambertMaterial({ map: texture });
+        var cylinderMesh = new THREE.Mesh(cylinderGeometry, cylinderMaterial);
+        cylinderMesh.position.set(0, 0, -200);
+        scene.add(cylinderMesh);
+
+        // Example using a TorusGeometry
+        var torusGeometry = new THREE.TorusGeometry(50, 20, 20, 20);
+        var torusMaterial = new THREE.MeshLambertMaterial({ map: texture });
+        var torusMesh = new THREE.Mesh(torusGeometry, torusMaterial);
+        torusMesh.position.set(200, 0, -200);
+        scene.add(torusMesh);
+
+        // Example using a ConeGeometry
+        var coneGeometry = new THREE.ConeGeometry(60, 100, 20);
+        var coneMaterial = new THREE.MeshLambertMaterial({ map: texture });
+        var coneMesh = new THREE.Mesh(coneGeometry, coneMaterial);
+        coneMesh.position.set(0, 0, 200);
+        scene.add(coneMesh);
+
+        // Example using a DodecahedronGeometry
+        var dodecahedronGeometry = new THREE.DodecahedronGeometry(75, 0);
+        var dodecahedronMaterial = new THREE.MeshLambertMaterial({ map: texture });
+        var dodecahedronMesh = new THREE.Mesh(dodecahedronGeometry, dodecahedronMaterial);
+        dodecahedronMesh.position.set(200, 0, 200);
+        scene.add(dodecahedronMesh);
+
+        renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(640, 480); // Adjusted renderer size to meet the minimum requirement
+
+        container.appendChild(renderer.domElement);
+
+        stats = new Stats();
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+
+        var animationType = document.querySelector('input[name="animation"]:checked').value;
+
+        if (animationType === 'rotate') {
+            rotateAnimation();
+        } else if (animationType === 'bounce') {
+            bounceAnimation();
+        }
+
+        render();
+        stats.update();
+    }
+
+    function render() {
+        var timer = Date.now() * 0.0001;
+
+        camera.position.x = Math.cos(timer) * 800;
+        camera.position.z = Math.sin(timer) * 800;
+
+        camera.lookAt(scene.position);
+
+        renderer.render(scene, camera);
+    }
+
+    function rotateAnimation() {
+        var timer = Date.now() * 0.001;
+
+        for (var i = 0, l = scene.children.length; i < l; i++) {
+            var object = scene.children[i];
+
+            object.rotation.y = timer * 2; // Rotate around Y-axis
+        }
+    }
+
+    function bounceAnimation() {
+        var timer = Date.now() * 0.001;
+
+        for (var i = 0, l = scene.children.length; i < l; i++) {
+            var object = scene.children[i];
+
+            object.position.y = Math.abs(Math.sin(timer * 2)) * 100 + 50; // Bounce animation
+        }
+    }
+    </script>
+</body>
+</html>
